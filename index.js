@@ -53,7 +53,10 @@ async function login() {
 
 
 app.get("/health", (req, res) => {
-  res.status(200).send({ status: "UP" });
+  res.status(200).send({
+    status: "UP",
+    message: "Subhodeep's automatic attendance bot is running 24/7. For more info, visit <a href='https://subhodeep.tech' target='_blank'>https://subhodeep.tech</a>"
+  });
 });
 
 // Schedule a cron job to hit the /health endpoint every 13 minutes
