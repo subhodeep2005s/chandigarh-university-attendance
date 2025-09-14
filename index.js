@@ -7,6 +7,10 @@ import express from "express";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const URL=process.env.URL
+if (!URL) {
+  console.warn("URL not set in environment variables.");
+}
 
 if (!process.env.PORT) {
   console.warn("PORT not set in environment variables. Using default port 3000.");
@@ -52,9 +56,24 @@ app.get("/health", (req, res) => {
   res.status(200).send({ status: "UP" });
 });
 
+// Schedule a cron job to hit the /health endpoint every 13 minutes
+cron.schedule("*/13 * * * *", async () => {
+  try {
+    const res = await fetch(`${URL}/health`);
+    console.log("Health check status:", res.status);
+    console.log("Health check response:", await res.json());
+  } catch (err) {
+    console.error("Error during health check:", err);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
+
+
 
 
 
