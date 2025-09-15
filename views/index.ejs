@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Attendance Scheduler </title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; }
+    .container { max-width: 400px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+    h2 { text-align: center; }
+    label { display: block; margin-top: 12px; }
+    input, select { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #ccc; }
+    button { margin-top: 18px; width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .success { color: green; text-align: center; margin-top: 10px; }
+    .error { color: red; text-align: center; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Chandigarh University Attendance Scheduler</h2>
+    <img src="https://www.cuchd.in/about/assets/images/cu-logo.png" alt="Chandigarh University Logo" style="display: block; margin: 0 auto; width: 150px; height: auto;">
+    <% if (message) { %>
+      <div class="success"><%= message %></div>
+    <% } %>
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+    <form id="userForm" method="POST" action="/add-user">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required placeholder="Enter your full name">
+      <label for="whatsapp">WhatsApp Number</label>
+      <input type="tel" id="whatsapp" name="whatsapp" required pattern="[0-9]{10,15}" placeholder="e.g. 919876543210">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required placeholder="Enter your username">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Enter your password">
+      <label for="time">Login Time (IST)</label>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="time" id="time" name="time" required style="flex:1;">
+  <button type="button" id="ampmBtn" class="ampm-toggle am" aria-pressed="false" onclick="toggleAMPM()">AM</button>
+      </div>
+      <small>Select the time and AM/PM in IST (e.g., 10:02 AM, 1:30 PM)</small>
+      <button type="submit" style="margin-top:18px; background:#28a745;">Schedule Attendance</button>
+    </form>
+    <style>
+      h2{
+        text-align: center;
+        color: red;
+      }
+      input[type="text"], input[type="password"], input[type="tel"], input[type="time"] {
+        margin-bottom: 10px;
+        border: 1px solid #aaa;
+        font-size: 16px;
+      }
+      label { margin-top: 10px; font-weight: 500; }
+      #ampmBtn, .ampm-toggle {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 15px;
+        cursor: pointer;
+        outline: none;
+        transition: background 0.2s, color 0.2s;
+      }
+      #ampmBtn.am, .ampm-toggle.am {
+        background: #007bff;
+        color: #fff;
+      }
+      #ampmBtn.pm, .ampm-toggle.pm {
+        background: #ffc107;
+        color: #222;
+      }
+      #ampmBtn:focus, .ampm-toggle:focus {
+        box-shadow: 0 0 0 2px #0056b3;
+      }
+      .container { box-shadow: 0 4px 16px #0002; }
+    </style>
+    <script>
+    // Save form data to localStorage on submit
+    function toggleAMPM() {
+      const btn = document.getElementById('ampmBtn');
+      if (btn.innerText === 'AM') {
+        btn.innerText = 'PM';
+        btn.setAttribute('aria-pressed', 'true');
+        btn.classList.add('pm');
+        btn.classList.remove('am');
+      } else {
+        btn.innerText = 'AM';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.classList.add('am');
+        btn.classList.remove('pm');
+      }
+    }
+    // On form submit, convert time to 24h and submit
+    document.getElementById('userForm').onsubmit = function(e) {
+      let time = document.getElementById('time').value;
+      const ampm = document.getElementById('ampmBtn').innerText;
+      let [h, m] = time.split(":");
+      h = parseInt(h, 10);
+      if (ampm === "PM" && h < 12) h += 12;
+      if (ampm === "AM" && h === 12) h = 0;
+      document.getElementById('time').value = `${h.toString().padStart(2, '0')}:${m}`;
+    }
+    </script>
+  </div>
+</body>
+</html>
