@@ -20,10 +20,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const URL=process.env.URL
-const whatsapp_api_key=process.env.WHATSAPP_API_KEY
-if (!whatsapp_api_key) {
-  console.warn("WHATSAPP_API_KEY not set in environment variables.");
-}
+
 
 if (!URL) {
   console.warn("URL not set in environment variables.");
